@@ -8,4 +8,5 @@ results/
 # Local
 .claude/
 mise.toml
+CLAUDE.md
 SCRATCH.md
