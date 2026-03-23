@@ -1,0 +1,12 @@
+# Dependencies
+node_modules/
+
+# Output
+reports/
+results/
+
+# Local
+.claude/
+.git/
+mise.toml
+SCRATCH.md
