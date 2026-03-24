@@ -5,6 +5,10 @@ node_modules/
 reports/
 results/
 
+# Docs
+LICENSE
+README.md
+
 # Local
 .claude/
 .git/
