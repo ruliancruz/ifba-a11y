@@ -26,20 +26,22 @@ docker build -t ifba-a11y .
 docker run --ipc=host -v $(pwd)/results:/app/results ifba-a11y
 ```
 
-Results are saved to the `results/` directory as JSON files:
+Results are saved to the `results/` directory as JSON files, organized by platform and viewport:
 
 ```
 results/
   portal/
-    axe.json
-    ibm.json
+    desktop/axe.json, ibm.json
+    mobile/axe.json, ibm.json
   suap/
-    axe.json
-    ibm.json
+    desktop/axe.json, ibm.json
+    mobile/axe.json, ibm.json
   ava/
-    axe.json
-    ibm.json
+    desktop/axe.json, ibm.json
+    mobile/axe.json, ibm.json
 ```
+
+Each file includes a `metadata` object with `timestamp`, `url`, `browser`, `viewport`, `project`, `tool`, and `toolVersion`, making results self-documenting and independent of their directory context.
 
 ## Running a single platform
 
