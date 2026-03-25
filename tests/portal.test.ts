@@ -9,7 +9,7 @@ const IBM_VERSION = (JSON.parse(
 ) as { version: string }).version
 
 test.describe('Portal IFBA', () => {
-  test('axe-core: homepage', async ({ page }, testInfo) => {
+  test('axe-core: homepage', async ({ page, browser }, testInfo) => {
     const outputDir = `results/portal/${testInfo.project.name}`
     fs.mkdirSync(outputDir, { recursive: true })
 
@@ -25,9 +25,10 @@ test.describe('Portal IFBA', () => {
         metadata: {
           timestamp: new Date().toISOString(),
           url: page.url(),
-          browser: page.context().browser()?.browserType().name(),
+          browser: browser.browserType().name(),
+          browserVersion: browser.version(),
           viewport: page.viewportSize(),
-          project: testInfo.project.name,
+          device: testInfo.project.name,
           tool: 'axe-core',
           toolVersion: results.testEngine.version,
           wcagTags: WCAG_TAGS,
@@ -39,7 +40,7 @@ test.describe('Portal IFBA', () => {
     console.log(`axe violations: ${results.violations.length}`)
   })
 
-  test('IBM Equal Access: homepage', async ({ page }, testInfo) => {
+  test('IBM Equal Access: homepage', async ({ page, browser }, testInfo) => {
     const outputDir = `results/portal/${testInfo.project.name}`
     fs.mkdirSync(outputDir, { recursive: true })
 
@@ -54,9 +55,10 @@ test.describe('Portal IFBA', () => {
         metadata: {
           timestamp: new Date().toISOString(),
           url: page.url(),
-          browser: page.context().browser()?.browserType().name(),
+          browser: browser.browserType().name(),
+          browserVersion: browser.version(),
           viewport: page.viewportSize(),
-          project: testInfo.project.name,
+          device: testInfo.project.name,
           tool: 'ibm-equal-access',
           toolVersion: IBM_VERSION,
         },

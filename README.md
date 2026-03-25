@@ -41,7 +41,7 @@ results/
     mobile/axe.json, ibm.json
 ```
 
-Each file includes a `metadata` object with `timestamp`, `url`, `browser`, `viewport`, `project`, `tool`, and `toolVersion`, making results self-documenting and independent of their directory context.
+Each file includes a `metadata` object with `timestamp`, `url`, `browser`, `browserVersion`, `viewport`, `device`, `tool`, and `toolVersion`, making results self-documenting and independent of their directory context.
 
 ## Running a single platform
 
