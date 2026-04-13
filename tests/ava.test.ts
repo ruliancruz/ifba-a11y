@@ -3,7 +3,7 @@ import AxeBuilder from '@axe-core/playwright'
 import * as aChecker from 'accessibility-checker'
 import fs from 'fs'
 
-const WCAG_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']
+const WCAG_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22a', 'wcag22aa']
 const IBM_VERSION = (JSON.parse(
   fs.readFileSync(`${process.cwd()}/node_modules/accessibility-checker/package.json`, 'utf-8')
 ) as { version: string }).version

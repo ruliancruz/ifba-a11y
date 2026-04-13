@@ -1,19 +1,19 @@
 # IFBA Web Accessibility Evaluation
 
-Automated accessibility tests for the main web platforms of [IFBA](https://portal.ifba.edu.br) (Instituto Federal da Bahia), conducted as part of an undergraduate thesis in *Computing Degree*.
+Automated accessibility tests for the main web platforms of [IFBA](https://portal.ifba.edu.br) (Instituto Federal da Bahia), conducted as part of an undergraduate thesis in _Computing Degree_.
 
-The tests evaluate conformance with **WCAG 2.1 AA** using two independent tools:
+The tests evaluate conformance with **WCAG 2.2 AA** using two independent tools:
 
 - [axe-core](https://github.com/dequelabs/axe-core) by Deque Labs
 - [IBM Equal Access Checker](https://github.com/IBMa/equal-access)
 
 ## Platforms evaluated
 
-| Platform | URL |
-|---|---|
-| Portal Institucional | https://portal.ifba.edu.br |
-| SUAP | https://suap.ifba.edu.br |
-| AVA | https://ava.ifba.edu.br |
+| Platform             | URL                        |
+| -------------------- | -------------------------- |
+| Portal Institucional | <https://portal.ifba.edu.br> |
+| SUAP                 | <https://suap.ifba.edu.br>   |
+| AVA                  | <https://ava.ifba.edu.br>    |
 
 ## Requirements
 
