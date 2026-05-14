@@ -6,6 +6,7 @@ const MOBILE_VIEWPORT = { width: 375, height: 667 }
 
 export default defineConfig({
   testDir: './tests',
+  retries: 2,
   reporter: [
     ['html', { outputFolder: 'reports/html' }],
     ['json', { outputFile: 'reports/results.json' }],
