@@ -28,12 +28,26 @@ Results are saved to the `results/` directory as JSON files, organized by viewpo
 
 ```
 results/
-  portal/
-    desktop/axe.json, ibm.json
-    mobile/axe.json, ibm.json
+  desktop/axe.json, ibm.json
+  mobile/axe.json, ibm.json
 ```
 
-Each file includes a `metadata` object with `timestamp`, `url`, `browser`, `browserVersion`, `viewport`, `device`, `tool`, and `toolVersion`, making results self-documenting and independent of their directory context.
+Each file has three parts:
+
+- `metadata` — `timestamp`, `url`, `browser`, `browserVersion`, `viewport`, `device`, `tool`, and `toolVersion`, making the result self-documenting and independent of its directory context.
+- `violations` — a normalized list of violations with a shape shared by both tools (`tool`, `ruleId`, `wcag`, `description`, `count`, `targets`, `impact`, `helpUrl`), for direct comparison and analysis.
+- `raw` — the complete, untouched engine output, so no information is lost.
+
+## Development
+
+The evaluation logic (metadata assembly and the two normalizers) is covered by a
+unit suite run with [vitest](https://vitest.dev/), executed inside Docker so no
+tooling is installed on the host:
+
+```bash
+docker build -t ifba-a11y .
+docker run --rm ifba-a11y npm test
+```
 
 ## License
 

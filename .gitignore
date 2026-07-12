@@ -4,9 +4,10 @@ node_modules/
 # Output
 reports/
 results/
+coverage/
 
 # Local
+docs/
 .claude/
 mise.toml
 CLAUDE.md
-SCRATCH.md

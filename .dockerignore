@@ -8,10 +8,11 @@ results/
 # Docs
 LICENSE
 README.md
+docs/
+.github/
 
 # Local
 .claude/
 .git/
 mise.toml
 CLAUDE.md
-SCRATCH.md
