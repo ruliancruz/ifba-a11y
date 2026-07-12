@@ -1,9 +1,27 @@
 import { test, expect } from 'vitest'
-import { normalizeAxe } from '../../src/normalize/axe'
-import { axeRaw } from '../fixtures/axe'
+import { normalizeAxe, type AxeInput } from '../../src/normalize/axe'
 
 test('maps each axe rule to the common violation shape', () => {
-  const raw = axeRaw
+  const raw: AxeInput = {
+    violations: [
+      {
+        id: 'image-alt',
+        impact: 'critical',
+        description: 'Images must have alternate text',
+        helpUrl: 'https://example.test/rules/image-alt',
+        tags: ['cat.text-alternatives', 'wcag2a', 'wcag111', 'ACT'],
+        nodes: [{ target: ['img.logo'] }, { target: ['#hero > img'] }],
+      },
+      {
+        id: 'color-contrast',
+        impact: 'serious',
+        description: 'Elements must meet minimum color contrast ratio thresholds',
+        helpUrl: 'https://example.test/rules/color-contrast',
+        tags: ['cat.color', 'wcag2aa', 'wcag143'],
+        nodes: [{ target: ['a.tile-footer'] }, { target: ['#modal', 'button.close'] }],
+      },
+    ],
+  }
 
   const violations = normalizeAxe(raw)
 
