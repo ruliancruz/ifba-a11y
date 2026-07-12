@@ -16,17 +16,7 @@ test('assembles a self-contained metadata object including requested WCAG tags',
 
   const metadata = buildMetadata(context)
 
-  expect(metadata).toEqual({
-    timestamp: '2026-05-14T12:00:00.000Z',
-    url: 'https://portal.ifba.edu.br/',
-    browser: 'chromium',
-    browserVersion: '145.0.7632.6',
-    viewport: { width: 1280, height: 720 },
-    device: 'desktop',
-    tool: 'axe-core',
-    toolVersion: '4.11.1',
-    wcagTags: ['wcag2a', 'wcag22aa'],
-  })
+  expect(metadata).toEqual(context)
 })
 
 test('omits wcagTags when no tags are requested', () => {
