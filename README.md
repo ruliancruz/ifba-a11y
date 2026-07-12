@@ -41,12 +41,14 @@ Each file has three parts:
 ## Development
 
 The evaluation logic (metadata assembly and the two normalizers) is covered by a
-unit suite run with [vitest](https://vitest.dev/), executed inside Docker so no
-tooling is installed on the host:
+unit suite run with [vitest](https://vitest.dev/), and the code is linted with
+type-aware [ESLint](https://eslint.org/). Both run inside Docker so no tooling is
+installed on the host:
 
 ```bash
 docker build -t ifba-a11y .
 docker run --rm ifba-a11y npm test
+docker run --rm ifba-a11y npm run lint
 ```
 
 ## License
