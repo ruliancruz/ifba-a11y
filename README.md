@@ -41,7 +41,7 @@ Each file has three parts:
 ## Analysis
 
 The collected results are analyzed in a [Jupyter](https://jupyter.org/) notebook
-(`analysis/analysis.ipynb`) that reads the JSON files directly and reproduces the
+(`analysis/notebook.ipynb`) that reads the JSON files directly and reproduces the
 violation counts, per-tool tables, WCAG-criterion distribution, impact profile and
 axe-vs-IBM comparison. All aggregation logic lives in a small, unit-tested Python
 package (`analysis/a11y/`); the notebook only loads the data and renders tables and
@@ -57,14 +57,14 @@ docker run --rm -it -p 8888:8888 -v $(pwd):/app \
 ```
 
 Open the `http://127.0.0.1:8888/lab?token=…` link it prints, then open
-`analysis/analysis.ipynb` and run all cells. Figures are written to
+`analysis/notebook.ipynb` and run all cells. Figures are written to
 `reports/figures/`. Stop the server with `Ctrl-C`.
 
 To regenerate the tables and figures headlessly, without opening the notebook:
 
 ```bash
 docker run --rm -v $(pwd)/results:/app/results -v $(pwd)/reports:/app/reports \
-  ifba-a11y-analysis jupyter nbconvert --to notebook --execute analysis/analysis.ipynb
+  ifba-a11y-analysis jupyter nbconvert --to notebook --execute analysis/notebook.ipynb
 ```
 
 ## Development
