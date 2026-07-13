@@ -6,6 +6,12 @@ reports/
 results/
 coverage/
 
+# Python
+__pycache__/
+.pytest_cache/
+.coverage
+.ipynb_checkpoints/
+
 # Local
 docs/
 .claude/

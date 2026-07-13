@@ -4,6 +4,13 @@ node_modules/
 # Output
 reports/
 results/
+coverage/
+
+# Python
+__pycache__/
+.pytest_cache/
+.coverage
+.ipynb_checkpoints/
 
 # Docs
 LICENSE
