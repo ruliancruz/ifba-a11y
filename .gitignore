@@ -17,3 +17,4 @@ docs/
 .claude/
 mise.toml
 CLAUDE.md
+build_notebook.py
