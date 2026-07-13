@@ -8,3 +8,9 @@ omit = ["*/load.py"]
 
 [tool.coverage.report]
 fail_under = 100
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint.per-file-ignores]
+"*.ipynb" = ["E402"]
