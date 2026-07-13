@@ -1,4 +1,15 @@
-from a11y.aggregate import axe_rules, by_criterion, by_impact, ibm_buckets, ibm_rules, overview
+from a11y.aggregate import (
+    axe_rules,
+    by_criterion,
+    by_impact,
+    by_level,
+    by_principle,
+    ibm_buckets,
+    ibm_rules,
+    overview,
+    priorities,
+    viewport_criteria,
+)
 from a11y.schema import Metadata, Result, Violation
 
 
@@ -155,4 +166,94 @@ def test_by_criterion_uses_the_ibm_lookup_for_occurrences_per_criterion():
     assert rows == [
         {'criterion': '2.4.4', 'principle': 'Operable', 'level': 'A', 'occurrences': 20},
         {'criterion': '4.1.2', 'principle': 'Robust', 'level': 'A', 'occurrences': 20},
+    ]
+
+
+def test_by_principle_rolls_occurrences_up_to_pour_principles_in_canonical_order():
+    results = [
+        _result('desktop', 'axe-core', [
+            _violation('image-alt', 10, wcag=['1.1.1']),
+            _violation('link-name', 7, wcag=['2.4.4', '4.1.2']),
+        ]),
+        _result('mobile', 'axe-core', [
+            _violation('image-alt', 10, wcag=['1.1.1']),
+            _violation('link-name', 12, wcag=['2.4.4', '4.1.2']),
+        ]),
+    ]
+
+    rows = by_principle(results, 'axe-core')
+
+    assert rows == [
+        {'principle': 'Perceivable', 'occurrences': 20},
+        {'principle': 'Operable', 'occurrences': 19},
+        {'principle': 'Robust', 'occurrences': 19},
+    ]
+
+
+def test_by_level_rolls_occurrences_up_to_conformance_levels_a_before_aa():
+    results = [
+        _result('desktop', 'axe-core', [
+            _violation('target-size', 25, wcag=['2.5.8']),
+            _violation('link-name', 7, wcag=['2.4.4', '4.1.2']),
+        ]),
+        _result('mobile', 'axe-core', [
+            _violation('target-size', 4, wcag=['2.5.8']),
+            _violation('link-name', 12, wcag=['2.4.4', '4.1.2']),
+        ]),
+    ]
+
+    rows = by_level(results, 'axe-core')
+
+    assert rows == [
+        {'level': 'A', 'occurrences': 38},
+        {'level': 'AA', 'occurrences': 29},
+    ]
+
+
+def test_viewport_criteria_partitions_wcag_criteria_shared_or_specific_to_each_viewport():
+    results = [
+        _result('desktop', 'axe-core', [
+            _violation('link-name', 7, wcag=['2.4.4', '4.1.2']),
+            _violation('target-size', 25, wcag=['2.5.8']),
+        ]),
+        _result('desktop', 'ibm-equal-access', [
+            _violation('aria_content_in_landmark', 6, tool='ibm-equal-access'),
+        ]),
+        _result('mobile', 'axe-core', [
+            _violation('link-name', 12, wcag=['2.4.4', '4.1.2']),
+        ]),
+        _result('mobile', 'ibm-equal-access', [
+            _violation('img_alt_redundant', 3, tool='ibm-equal-access'),
+        ]),
+    ]
+
+    partition = viewport_criteria(results)
+
+    assert partition == {
+        'shared': ['2.4.4', '4.1.2'],
+        'desktop_only': ['1.3.1', '2.5.8'],
+        'mobile_only': ['1.1.1'],
+    }
+
+
+def test_priorities_ranks_axe_rules_by_impact_severity_then_frequency():
+    results = [
+        _result('desktop', 'axe-core', [
+            _violation('image-alt', 10, wcag=['1.1.1'], impact='critical'),
+            _violation('target-size', 25, wcag=['2.5.8'], impact='serious'),
+            _violation('link-name', 7, wcag=['2.4.4', '4.1.2'], impact='serious'),
+        ]),
+        _result('mobile', 'axe-core', [
+            _violation('image-alt', 10, wcag=['1.1.1'], impact='critical'),
+            _violation('target-size', 4, wcag=['2.5.8'], impact='serious'),
+            _violation('link-name', 12, wcag=['2.4.4', '4.1.2'], impact='serious'),
+        ]),
+    ]
+
+    rows = priorities(results)
+
+    assert rows == [
+        {'rule_id': 'image-alt', 'wcag': ['1.1.1'], 'level': 'A', 'impact': 'critical', 'occurrences': 20},
+        {'rule_id': 'target-size', 'wcag': ['2.5.8'], 'level': 'AA', 'impact': 'serious', 'occurrences': 29},
+        {'rule_id': 'link-name', 'wcag': ['2.4.4', '4.1.2'], 'level': 'A', 'impact': 'serious', 'occurrences': 19},
     ]
