@@ -1,5 +1,5 @@
 import { test, expect } from 'vitest'
-import { buildMetadata } from '../../src/metadata'
+import { buildMetadata } from '../../collection/metadata'
 
 test('assembles a self-contained metadata object including requested WCAG tags', () => {
   const context = {

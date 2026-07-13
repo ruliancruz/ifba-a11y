@@ -1,13 +1,13 @@
 import { test } from '@playwright/test'
 import type { Browser, Page } from '@playwright/test'
 import * as fs from 'node:fs'
-import { TARGET_URL, WCAG_TAGS } from '../src/config'
-import { buildMetadata } from '../src/metadata'
-import { normalizeAxe } from '../src/normalize/axe'
-import { normalizeIbm } from '../src/normalize/ibm'
-import { runAxe } from '../src/engines/axe'
-import { runIbm } from '../src/engines/ibm'
-import { writeResult } from '../src/collect'
+import { TARGET_URL, WCAG_TAGS } from '../collection/config'
+import { buildMetadata } from '../collection/metadata'
+import { normalizeAxe } from '../collection/normalize/axe'
+import { normalizeIbm } from '../collection/normalize/ibm'
+import { runAxe } from '../collection/engines/axe'
+import { runIbm } from '../collection/engines/ibm'
+import { writeResult } from '../collection/collect'
 
 const IBM_VERSION = (
   JSON.parse(
