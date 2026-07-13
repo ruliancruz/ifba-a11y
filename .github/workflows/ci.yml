@@ -6,7 +6,7 @@ on:
   pull_request:
 
 jobs:
-  test:
+  collection:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -36,5 +36,5 @@ jobs:
         run: pip-audit
       - name: Lint
         run: ruff check
-      - name: Python unit tests with coverage
+      - name: Unit tests with coverage
         run: pytest
