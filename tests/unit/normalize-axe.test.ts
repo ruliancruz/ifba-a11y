@@ -1,5 +1,5 @@
 import { test, expect } from 'vitest'
-import { normalizeAxe, type AxeInput } from '../../src/normalize/axe'
+import { normalizeAxe, type AxeInput } from '../../collection/normalize/axe'
 
 test('maps each axe rule to the common violation shape', () => {
   const raw: AxeInput = {

@@ -1,5 +1,5 @@
 import { defineConfig } from '@playwright/test'
-import { VIEWPORTS } from './src/config'
+import { VIEWPORTS } from './collection/config'
 
 export default defineConfig({
   testDir: './tests',

@@ -1,5 +1,5 @@
 import { test, expect } from 'vitest'
-import { normalizeIbm, type IbmInput } from '../../src/normalize/ibm'
+import { normalizeIbm, type IbmInput } from '../../collection/normalize/ibm'
 
 test('groups confirmed violations by rule into the common shape', () => {
   const raw: IbmInput = {
