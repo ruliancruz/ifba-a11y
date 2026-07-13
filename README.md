@@ -20,8 +20,8 @@ The tests evaluate conformance with **WCAG 2.2 AA** using two independent tools:
 ## Running the tests
 
 ```bash
-docker build -t ifba-a11y .
-docker run --ipc=host -v $(pwd)/results:/app/results ifba-a11y
+docker build --target collect -t ifba-a11y-collect .
+docker run --ipc=host -v $(pwd)/results:/app/results ifba-a11y-collect
 ```
 
 Results are saved to the `results/` directory as JSON files, organized by viewport:
@@ -38,17 +38,50 @@ Each file has three parts:
 - `violations` — a normalized list of violations with a shape shared by both tools (`tool`, `ruleId`, `wcag`, `description`, `count`, `targets`, `impact`, `helpUrl`), for direct comparison and analysis.
 - `raw` — the complete, untouched engine output, so no information is lost.
 
-## Development
+## Analysis
 
-The evaluation logic (metadata assembly and the two normalizers) is covered by a
-unit suite run with [vitest](https://vitest.dev/), and the code is linted with
-type-aware [ESLint](https://eslint.org/). Both run inside Docker so no tooling is
-installed on the host:
+The collected results are analyzed in a [Jupyter](https://jupyter.org/) notebook
+(`analysis/notebook.ipynb`) that reads the JSON files directly and reproduces the
+violation counts, per-tool tables, WCAG-criterion distribution, impact profile and
+axe-vs-IBM comparison. All aggregation logic lives in a small, unit-tested Python
+package (`analysis/a11y/`); the notebook only loads the data and renders tables and
+figures.
+
+Build the analysis image and open the notebook:
 
 ```bash
-docker build -t ifba-a11y .
-docker run --rm ifba-a11y npm test
-docker run --rm ifba-a11y npm run lint
+docker build --target analysis -t ifba-a11y-analysis .
+docker run --rm -it -p 8888:8888 -v $(pwd):/app \
+  ifba-a11y-analysis \
+  jupyter lab --ip=0.0.0.0 --no-browser --allow-root --ServerApp.root_dir=/app
+```
+
+Open the `http://127.0.0.1:8888/lab?token=…` link it prints, then open
+`analysis/notebook.ipynb` and run all cells. Figures are written to
+`reports/figures/`. Stop the server with `Ctrl-C`.
+
+To regenerate the tables and figures headlessly, without opening the notebook:
+
+```bash
+docker run --rm -v $(pwd)/results:/app/results -v $(pwd)/reports:/app/reports \
+  ifba-a11y-analysis jupyter nbconvert --to notebook --execute analysis/notebook.ipynb
+```
+
+## Development
+
+The pure logic of both layers is covered by unit suites — TypeScript (metadata
+assembly and the two normalizers) with [vitest](https://vitest.dev/) plus
+type-aware [ESLint](https://eslint.org/), and Python (the analysis aggregation)
+with [pytest](https://pytest.org/) at 100% coverage. Everything runs inside Docker,
+so no tooling is installed on the host:
+
+```bash
+docker build --target collect  -t ifba-a11y-collect  .
+docker build --target analysis -t ifba-a11y-analysis .
+
+docker run --rm ifba-a11y-collect npm test
+docker run --rm ifba-a11y-collect npm run lint
+docker run --rm ifba-a11y-analysis
 ```
 
 ## License
