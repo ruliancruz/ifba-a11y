@@ -81,6 +81,50 @@ def by_criterion(results, tool):
     ]
 
 
+def by_principle(results, tool):
+    totals = {}
+    for row in by_criterion(results, tool):
+        totals[row['principle']] = totals.get(row['principle'], 0) + row['occurrences']
+    order = [principle(str(n)) for n in range(1, 5)]
+    return [{'principle': p, 'occurrences': totals[p]} for p in order if p in totals]
+
+
+def by_level(results, tool):
+    totals = {}
+    for row in by_criterion(results, tool):
+        totals[row['level']] = totals.get(row['level'], 0) + row['occurrences']
+    return [{'level': lvl, 'occurrences': totals[lvl]} for lvl in ['A', 'AA'] if lvl in totals]
+
+
+def viewport_criteria(results):
+    flagged = {}
+    for r in results:
+        for v in r.violations:
+            criteria = v.wcag if r.metadata.tool == 'axe-core' else ibm_criteria(v.rule_id)
+            flagged.setdefault(r.metadata.device, set()).update(criteria)
+    high, low = _devices(results)
+    return {
+        'shared': sorted(flagged[high] & flagged[low]),
+        f'{high}_only': sorted(flagged[high] - flagged[low]),
+        f'{low}_only': sorted(flagged[low] - flagged[high]),
+    }
+
+
+def priorities(results):
+    devices = _devices(results)
+    rows = [
+        {
+            'rule_id': row['rule_id'],
+            'wcag': row['wcag'],
+            'level': row['level'],
+            'impact': row['impact'],
+            'occurrences': sum(row[d] for d in devices),
+        }
+        for row in axe_rules(results)
+    ]
+    return sorted(rows, key=lambda r: (_IMPACT_ORDER.index(r['impact']), -r['occurrences'], r['rule_id']))
+
+
 def axe_rules(results):
     devices, counts, sample = _per_device_counts(results, 'axe-core')
     rows = []
