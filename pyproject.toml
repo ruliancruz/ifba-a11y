@@ -1,0 +1,10 @@
+[tool.pytest.ini_options]
+pythonpath = ["analysis"]
+testpaths = ["tests/analysis"]
+addopts = "--cov=a11y --cov-report=term-missing"
+
+[tool.coverage.run]
+omit = ["*/load.py"]
+
+[tool.coverage.report]
+fail_under = 100
