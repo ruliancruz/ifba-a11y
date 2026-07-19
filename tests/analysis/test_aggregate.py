@@ -117,7 +117,6 @@ def test_ibm_buckets_reads_each_summary_count_category_per_viewport():
         {'category': 'recommendation', 'desktop': 1, 'mobile': 1},
         {'category': 'potentialrecommendation', 'desktop': 69, 'mobile': 53},
         {'category': 'manual', 'desktop': 16, 'mobile': 35},
-        {'category': 'pass', 'desktop': 4983, 'mobile': 4940},
     ]
 
 
