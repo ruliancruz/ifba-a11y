@@ -8,7 +8,6 @@ _IBM_BUCKETS = [
     'recommendation',
     'potentialrecommendation',
     'manual',
-    'pass',
 ]
 
 
