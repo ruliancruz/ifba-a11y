@@ -28,3 +28,14 @@ export interface Result<Raw = unknown> {
   violations: Violation[]
   raw: Raw
 }
+
+export interface MissingAsset {
+  status: number
+  resourceType: string
+  url: string
+}
+
+export interface Fidelity {
+  stylesheets: number
+  missingAssets: MissingAsset[]
+}
