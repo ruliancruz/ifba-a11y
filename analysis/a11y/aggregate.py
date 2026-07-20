@@ -121,7 +121,12 @@ def priorities(results):
         }
         for row in axe_rules(results)
     ]
-    return sorted(rows, key=lambda r: (_IMPACT_ORDER.index(r['impact']), -r['occurrences'], r['rule_id']))
+    return sorted(rows, key=lambda r: (
+        _IMPACT_ORDER.index(r['impact']),
+        'A' not in r['level'].split('/'),
+        -r['occurrences'],
+        r['rule_id'],
+    ))
 
 
 def axe_rules(results):
