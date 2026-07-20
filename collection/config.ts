@@ -17,8 +17,8 @@ export const TARGETS: Target[] = [
     outDir: 'results/archive',
   },
   {
-    label: 'live-root',
-    url: PORTAL_ROOT_URL,
+    label: 'salvador',
+    url: `${PORTAL_ROOT_URL}salvador/`,
     mode: 'live',
     outDir: 'results/live',
   },
