@@ -235,24 +235,27 @@ def test_viewport_criteria_partitions_wcag_criteria_shared_or_specific_to_each_v
     }
 
 
-def test_priorities_ranks_axe_rules_by_impact_severity_then_frequency():
+def test_priorities_ranks_axe_rules_by_impact_then_level_a_over_aa_then_frequency():
     results = [
         _result('desktop', 'axe-core', [
-            _violation('image-alt', 10, wcag=['1.1.1'], impact='critical'),
-            _violation('target-size', 25, wcag=['2.5.8'], impact='serious'),
-            _violation('link-name', 7, wcag=['2.4.4', '4.1.2'], impact='serious'),
+            _violation('image-alt', 5, wcag=['1.1.1'], impact='critical'),
+            _violation('target-size', 20, wcag=['2.5.8'], impact='serious'),
+            _violation('link-name', 10, wcag=['2.4.4', '4.1.2'], impact='serious'),
+            _violation('color-contrast', 2, wcag=['1.4.3'], impact='serious'),
         ]),
         _result('mobile', 'axe-core', [
-            _violation('image-alt', 10, wcag=['1.1.1'], impact='critical'),
-            _violation('target-size', 4, wcag=['2.5.8'], impact='serious'),
-            _violation('link-name', 12, wcag=['2.4.4', '4.1.2'], impact='serious'),
+            _violation('image-alt', 5, wcag=['1.1.1'], impact='critical'),
+            _violation('target-size', 9, wcag=['2.5.8'], impact='serious'),
+            _violation('link-name', 9, wcag=['2.4.4', '4.1.2'], impact='serious'),
+            _violation('color-contrast', 2, wcag=['1.4.3'], impact='serious'),
         ]),
     ]
 
     rows = priorities(results)
 
     assert rows == [
-        {'rule_id': 'image-alt', 'wcag': ['1.1.1'], 'level': 'A', 'impact': 'critical', 'occurrences': 20},
-        {'rule_id': 'target-size', 'wcag': ['2.5.8'], 'level': 'AA', 'impact': 'serious', 'occurrences': 29},
+        {'rule_id': 'image-alt', 'wcag': ['1.1.1'], 'level': 'A', 'impact': 'critical', 'occurrences': 10},
         {'rule_id': 'link-name', 'wcag': ['2.4.4', '4.1.2'], 'level': 'A', 'impact': 'serious', 'occurrences': 19},
+        {'rule_id': 'target-size', 'wcag': ['2.5.8'], 'level': 'AA', 'impact': 'serious', 'occurrences': 29},
+        {'rule_id': 'color-contrast', 'wcag': ['1.4.3'], 'level': 'AA', 'impact': 'serious', 'occurrences': 4},
     ]
