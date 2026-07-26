@@ -9,9 +9,18 @@ The tests evaluate conformance with **WCAG 2.2 AA** using two independent tools:
 
 ## Platform evaluated
 
-| Platform             | URL                          |
-| -------------------- | ---------------------------- |
-| Portal Institucional | <https://portal.ifba.edu.br> |
+The suite evaluates a manifest of two targets derived from the IFBA institutional
+portal (<https://portal.ifba.edu.br>):
+
+| Target    | Page                                    | Role                                           |
+| --------- | --------------------------------------- | ---------------------------------------------- |
+| `archive` | Archived homepage (Internet Archive)    | Headline, fully reproducible dataset           |
+| `live`    | Salvador campus homepage (`/salvador/`) | Live external-validity check on a similar page |
+
+The portal root currently redirects to an electoral-blackout notice, so the headline
+dataset uses the last archived homepage capture taken before the redirect began. The
+live Salvador campus homepage, a template-similar page that does not redirect,
+confirms the toolchain still operates against the live portal.
 
 ## Requirements
 
@@ -24,17 +33,24 @@ docker build --target collect -t ifba-a11y-collect .
 docker run --ipc=host -v $(pwd)/results:/app/results ifba-a11y-collect
 ```
 
-Results are saved to the `results/` directory as JSON files, organized by viewport:
+Results are saved to the `results/` directory as JSON files, organized by target and viewport:
 
 ```
 results/
-  desktop/axe.json, ibm.json
-  mobile/axe.json, ibm.json
+  archive/
+    desktop/axe.json, ibm.json, fidelity.json
+    mobile/axe.json, ibm.json, fidelity.json
+  live/
+    desktop/axe.json, ibm.json
+    mobile/axe.json, ibm.json
 ```
 
-Each file has three parts:
+Archived targets also write a `fidelity.json` recording how faithfully the capture
+loaded (stylesheet count and any missing assets), as a capture-provenance record.
 
-- `metadata` — `timestamp`, `url`, `browser`, `browserVersion`, `viewport`, `device`, `tool`, and `toolVersion`, making the result self-documenting and independent of its directory context.
+Each `axe.json` / `ibm.json` file has three parts:
+
+- `metadata` — `timestamp`, `url`, `browser`, `browserVersion`, `viewport`, `device`, `tool`, `toolVersion`, and `wcagTags` (axe only), making the result self-documenting and independent of its directory context.
 - `violations` — a normalized list of violations with a shape shared by both tools (`tool`, `ruleId`, `wcag`, `description`, `count`, `targets`, `impact`, `helpUrl`), for direct comparison and analysis.
 - `raw` — the complete, untouched engine output, so no information is lost.
 
@@ -42,10 +58,12 @@ Each file has three parts:
 
 The collected results are analyzed in a [Jupyter](https://jupyter.org/) notebook
 (`analysis/notebook.ipynb`) that reads the JSON files directly and reproduces the
-violation counts, per-tool tables, WCAG-criterion distribution, impact profile and
-axe-vs-IBM comparison. All aggregation logic lives in a small, unit-tested Python
-package (`analysis/a11y/`); the notebook only loads the data and renders tables and
-figures.
+violation counts, per-tool tables, the WCAG criterion / principle / conformance-level
+and impact breakdowns, the axe-vs-IBM convergence, the desktop-vs-mobile comparison, a
+prioritized remediation ranking, and a live-validation section that cross-checks the
+live Salvador campus homepage against the archived homepage. All aggregation logic
+lives in a small, unit-tested Python package (`analysis/a11y/`); the notebook only
+loads the data and renders tables and figures.
 
 Build the analysis image and open the notebook:
 
