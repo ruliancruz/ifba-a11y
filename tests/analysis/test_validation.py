@@ -1,15 +1,15 @@
 from a11y.schema import Metadata, Result, Violation
-from a11y.validation import target_rules
+from a11y.validation import target_rules, target_selectors
 
 
-def _violation(rule_id, tool='axe-core'):
+def _violation(rule_id, tool='axe-core', targets=()):
     return Violation(
         tool=tool,
         rule_id=rule_id,
         wcag=[],
         description='d',
         count=1,
-        targets=[],
+        targets=list(targets),
     )
 
 
@@ -71,4 +71,66 @@ def test_target_rules_filters_by_tool_so_ibm_rules_partition_independently():
         'shared': ['a_text_purpose'],
         'reference_only': ['img_alt_valid'],
         'live_only': [],
+    }
+
+
+def test_target_selectors_partitions_selectors_per_rule_for_the_requested_device():
+    reference = [
+        _result('desktop', 'axe-core', [
+            _violation('target-size', targets=('#banner1', '.doormatSection > a')),
+            _violation('link-name', targets=('#logovlibras',)),
+        ]),
+        _result('mobile', 'axe-core', [_violation('target-size', targets=('#menu-icon',))]),
+    ]
+    live = [
+        _result('desktop', 'axe-core', [
+            _violation('target-size', targets=('#banner1', 'a[href$="instituto"]')),
+            _violation('image-alt', targets=('#mediacarousel',)),
+        ]),
+        _result('mobile', 'axe-core', [_violation('target-size', targets=('#banner1',))]),
+    ]
+
+    partition = target_selectors(reference, live, 'axe-core', 'desktop')
+
+    assert partition == {
+        'image-alt': {
+            'shared': [],
+            'reference_only': [],
+            'live_only': ['#mediacarousel'],
+        },
+        'link-name': {
+            'shared': [],
+            'reference_only': ['#logovlibras'],
+            'live_only': [],
+        },
+        'target-size': {
+            'shared': ['#banner1'],
+            'reference_only': ['.doormatSection > a'],
+            'live_only': ['a[href$="instituto"]'],
+        },
+    }
+
+
+def test_target_selectors_filters_by_tool_so_each_engine_partitions_independently():
+    reference = [
+        _result('desktop', 'axe-core', [_violation('link-name', targets=('#logovlibras',))]),
+        _result('desktop', 'ibm-equal-access', [
+            _violation('a_text_purpose', tool='ibm-equal-access', targets=('#logovlibras', '#extra')),
+        ]),
+    ]
+    live = [
+        _result('desktop', 'axe-core', [_violation('link-name', targets=('#other',))]),
+        _result('desktop', 'ibm-equal-access', [
+            _violation('a_text_purpose', tool='ibm-equal-access', targets=('#logovlibras',)),
+        ]),
+    ]
+
+    partition = target_selectors(reference, live, 'ibm-equal-access', 'desktop')
+
+    assert partition == {
+        'a_text_purpose': {
+            'shared': ['#logovlibras'],
+            'reference_only': ['#extra'],
+            'live_only': [],
+        },
     }
