@@ -20,7 +20,31 @@ export const TARGETS: Target[] = [
     label: 'salvador',
     url: `${PORTAL_ROOT_URL}salvador/`,
     mode: 'live',
-    outDir: 'results/live',
+    outDir: 'results/live/salvador',
+  },
+  {
+    label: 'euclides-da-cunha',
+    url: `${PORTAL_ROOT_URL}euclides-da-cunha/`,
+    mode: 'live',
+    outDir: 'results/live/euclides-da-cunha',
+  },
+  {
+    label: 'feira-de-santana',
+    url: `${PORTAL_ROOT_URL}feira-de-santana/`,
+    mode: 'live',
+    outDir: 'results/live/feira-de-santana',
+  },
+  {
+    label: 'jacobina-noticia',
+    url: `${PORTAL_ROOT_URL}jacobina/noticia/2026/atendimento-medico-e-iniciado-no-campus`,
+    mode: 'live',
+    outDir: 'results/live/jacobina-noticia',
+  },
+  {
+    label: 'acessoainformacao-institucional',
+    url: `${PORTAL_ROOT_URL}acessoainformacao/institucional`,
+    mode: 'live',
+    outDir: 'results/live/acessoainformacao-institucional',
   },
 ]
 
