@@ -35,10 +35,10 @@ export const TARGETS: Target[] = [
     outDir: 'results/live/feira-de-santana',
   },
   {
-    label: 'jacobina-noticia',
-    url: `${PORTAL_ROOT_URL}jacobina/noticia/2026/atendimento-medico-e-iniciado-no-campus`,
+    label: 'noticia-institucional',
+    url: `${PORTAL_ROOT_URL}instituto-federal/noticias-2018/ifba-disponibiliza-emissao-de-identidade-funcional`,
     mode: 'live',
-    outDir: 'results/live/jacobina-noticia',
+    outDir: 'results/live/noticia-institucional',
   },
   {
     label: 'acessoainformacao-institucional',
