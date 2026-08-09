@@ -1,4 +1,4 @@
-from a11y.wcag import ibm_criteria, level, principle
+from a11y.wcag import affected_groups, ibm_criteria, level, principle
 
 _IMPACT_ORDER = ['critical', 'serious', 'moderate', 'minor']
 
@@ -77,6 +77,18 @@ def by_criterion(results, tool):
     return [
         {'criterion': c, 'principle': principle(c), 'level': level(c), 'occurrences': totals[c]}
         for c in sorted(totals)
+    ]
+
+
+def impact_table(results):
+    seen = set()
+    for r in results:
+        for v in r.violations:
+            criteria = v.wcag if r.metadata.tool == 'axe-core' else ibm_criteria(v.rule_id)
+            seen.update(criteria)
+    return [
+        {'criterion': c, 'principle': principle(c), 'level': level(c), 'groups': affected_groups(c)}
+        for c in sorted(seen)
     ]
 
 

@@ -6,6 +6,7 @@ from a11y.aggregate import (
     by_principle,
     ibm_buckets,
     ibm_rules,
+    impact_table,
     overview,
     priorities,
     viewport_criteria,
@@ -233,6 +234,31 @@ def test_viewport_criteria_partitions_wcag_criteria_shared_or_specific_to_each_v
         'desktop_only': ['1.3.1', '2.5.8'],
         'mobile_only': ['1.1.1'],
     }
+
+
+def test_impact_table_lists_each_observed_criterion_with_level_principle_and_affected_groups():
+    results = [
+        _result('desktop', 'axe-core', [
+            _violation('target-size', 25, wcag=['2.5.8']),
+            _violation('link-name', 7, wcag=['2.4.4', '4.1.2']),
+        ]),
+        _result('desktop', 'ibm-equal-access', [
+            _violation('aria_content_in_landmark', 6, tool='ibm-equal-access'),
+        ]),
+    ]
+
+    rows = impact_table(results)
+
+    assert rows == [
+        {'criterion': '1.3.1', 'principle': 'Perceivable', 'level': 'A',
+         'groups': ['screen_reader']},
+        {'criterion': '2.4.4', 'principle': 'Operable', 'level': 'A',
+         'groups': ['screen_reader', 'cognitive', 'motor']},
+        {'criterion': '2.5.8', 'principle': 'Operable', 'level': 'AA',
+         'groups': ['motor', 'touch_mobile']},
+        {'criterion': '4.1.2', 'principle': 'Robust', 'level': 'A',
+         'groups': ['screen_reader', 'low_vision', 'motor']},
+    ]
 
 
 def test_priorities_ranks_axe_rules_by_impact_then_level_a_over_aa_then_frequency():
