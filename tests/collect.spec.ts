@@ -50,38 +50,33 @@ async function captureFidelity(page: Page, target: Target, missing: MissingAsset
 }
 
 for (const target of TARGETS) {
-  test.describe(`Portal IFBA accessibility — ${target.label}`, () => {
-    test('axe-core', async ({ page, browser }, testInfo) => {
-      const missing = trackMissingAssets(page)
-      await gotoTarget(page, target)
-      await captureFidelity(page, target, missing, `${target.outDir}/${testInfo.project.name}`)
-      const raw = await runAxe(page)
+  test(`Portal IFBA accessibility — ${target.label}`, async ({ page, browser }, testInfo) => {
+    const directory = `${target.outDir}/${testInfo.project.name}`
+    const missing = trackMissingAssets(page)
+    await gotoTarget(page, target)
+    await captureFidelity(page, target, missing, directory)
 
-      writeResult(`${target.outDir}/${testInfo.project.name}`, 'axe.json', {
-        metadata: buildMetadata({
-          ...executionContext(page, browser, testInfo.project.name),
-          tool: 'axe-core',
-          toolVersion: raw.testEngine.version,
-          wcagTags: WCAG_TAGS,
-        }),
-        violations: normalizeAxe(raw),
-        raw,
-      })
+    const axeRaw = await runAxe(page)
+    writeResult(directory, 'axe.json', {
+      metadata: buildMetadata({
+        ...executionContext(page, browser, testInfo.project.name),
+        tool: 'axe-core',
+        toolVersion: axeRaw.testEngine.version,
+        wcagTags: WCAG_TAGS,
+      }),
+      violations: normalizeAxe(axeRaw),
+      raw: axeRaw,
     })
 
-    test('IBM Equal Access', async ({ page, browser }, testInfo) => {
-      await gotoTarget(page, target)
-      const raw = await runIbm(page, `portal-${target.label}-${testInfo.project.name}`)
-
-      writeResult(`${target.outDir}/${testInfo.project.name}`, 'ibm.json', {
-        metadata: buildMetadata({
-          ...executionContext(page, browser, testInfo.project.name),
-          tool: 'ibm-equal-access',
-          toolVersion: IBM_VERSION,
-        }),
-        violations: normalizeIbm(raw),
-        raw,
-      })
+    const ibmRaw = await runIbm(page, `portal-${target.label}-${testInfo.project.name}`)
+    writeResult(directory, 'ibm.json', {
+      metadata: buildMetadata({
+        ...executionContext(page, browser, testInfo.project.name),
+        tool: 'ibm-equal-access',
+        toolVersion: IBM_VERSION,
+      }),
+      violations: normalizeIbm(ibmRaw),
+      raw: ibmRaw,
     })
   })
 }
