@@ -46,6 +46,18 @@ export const TARGETS: Target[] = [
     mode: 'live',
     outDir: 'results/live/acessoainformacao-institucional',
   },
+  {
+    label: 'ingresso-2026',
+    url: `${PORTAL_ROOT_URL}ingresso2026`,
+    mode: 'live',
+    outDir: 'results/live/ingresso-2026',
+  },
+  {
+    label: 'ingresso-2026-publicacoes',
+    url: `${PORTAL_ROOT_URL}ingresso2026/doc_pub/publicacoes/`,
+    mode: 'live',
+    outDir: 'results/live/ingresso-2026-publicacoes',
+  },
 ]
 
 export const WCAG_TAGS = [
