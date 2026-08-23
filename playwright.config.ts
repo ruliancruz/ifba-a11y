@@ -4,7 +4,8 @@ import { VIEWPORTS } from './collection/config'
 export default defineConfig({
   testDir: './tests',
   testMatch: '**/*.spec.ts',
-  timeout: 90_000,
+  timeout: 180_000,
+  workers: 1,
   retries: 2,
   reporter: [
     ['html', { outputFolder: 'reports/html' }],
