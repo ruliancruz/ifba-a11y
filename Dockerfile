@@ -3,6 +3,7 @@ FROM mcr.microsoft.com/playwright:v1.61.1-noble AS collect
 WORKDIR /app
 
 COPY package*.json ./
+ENV PUPPETEER_SKIP_DOWNLOAD=1
 RUN npm install
 
 COPY . .
