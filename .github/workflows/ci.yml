@@ -38,5 +38,7 @@ jobs:
         run: pip-audit
       - name: Lint
         run: ruff check
+      - name: Notebook carries no execution output
+        run: '! grep -qE ''"(output_type|execution_count)": [^n]'' analysis/notebook.ipynb'
       - name: Unit tests with coverage
         run: pytest
