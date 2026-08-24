@@ -1,4 +1,4 @@
-from a11y.convergence import compare
+from a11y.convergence import compare, rule_pairs
 from a11y.schema import Metadata, Result, Violation
 
 
@@ -56,3 +56,32 @@ def test_compare_partitions_wcag_criteria_into_shared_and_engine_specific():
         'axe_only': ['2.5.8'],
         'ibm_only': ['1.3.1'],
     }
+
+
+def test_rule_pairs_matches_counterpart_rules_and_flags_engine_exclusive_ones():
+    results = [
+        _result('desktop', 'axe-core', [
+            _violation('image-alt', 20, wcag=['1.1.1']),
+            _violation('link-name', 11, wcag=['2.4.4', '4.1.2']),
+            _violation('target-size', 25, wcag=['2.5.8']),
+        ]),
+        _result('desktop', 'ibm-equal-access', [
+            _violation('img_alt_valid', 20, tool='ibm-equal-access'),
+            _violation('img_alt_redundant', 3, tool='ibm-equal-access'),
+            _violation('a_text_purpose', 11, tool='ibm-equal-access'),
+            _violation('aria_content_in_landmark', 6, tool='ibm-equal-access'),
+        ]),
+    ]
+
+    assert rule_pairs(results) == [
+        {'axe_rule': 'image-alt', 'ibm_rule': 'img_alt_valid',
+         'criteria': ['1.1.1'], 'level': 'A', 'detection': 'both'},
+        {'axe_rule': None, 'ibm_rule': 'img_alt_redundant',
+         'criteria': ['1.1.1'], 'level': 'A', 'detection': 'ibm_only'},
+        {'axe_rule': None, 'ibm_rule': 'aria_content_in_landmark',
+         'criteria': ['1.3.1'], 'level': 'A', 'detection': 'ibm_only'},
+        {'axe_rule': 'link-name', 'ibm_rule': 'a_text_purpose',
+         'criteria': ['2.4.4', '4.1.2'], 'level': 'A', 'detection': 'both'},
+        {'axe_rule': 'target-size', 'ibm_rule': None,
+         'criteria': ['2.5.8'], 'level': 'AA', 'detection': 'axe_only'},
+    ]

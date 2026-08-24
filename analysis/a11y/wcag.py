@@ -30,6 +30,17 @@ _IBM_CRITERIA = {
 }
 
 
+_ENGINE_PAIRS = {
+    'image-alt': 'img_alt_valid',
+    'link-name': 'a_text_purpose',
+    'color-contrast': 'text_contrast_sufficient',
+    'frame-title': 'frame_title_exists',
+}
+
+
+_COUNTERPARTS = {**_ENGINE_PAIRS, **{ibm: axe for axe, ibm in _ENGINE_PAIRS.items()}}
+
+
 _AFFECTED_GROUPS = {
     '1.1.1': ['screen_reader', 'cognitive'],
     '1.3.1': ['screen_reader'],
@@ -56,3 +67,7 @@ def ibm_criteria(rule_id):
 
 def affected_groups(criterion):
     return _AFFECTED_GROUPS[criterion]
+
+
+def counterpart(rule_id):
+    return _COUNTERPARTS.get(rule_id)
