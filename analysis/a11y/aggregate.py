@@ -63,7 +63,7 @@ def by_impact(results):
     for device in _devices(results):
         for v in index[(device, 'axe-core')].violations:
             totals[v.impact] = totals.get(v.impact, 0) + v.count
-    return [{'impact': i, 'occurrences': totals[i]} for i in _IMPACT_ORDER if i in totals]
+    return [{'impact': i, 'occurrences': totals.get(i, 0)} for i in _IMPACT_ORDER]
 
 
 def by_criterion(results, tool):
@@ -97,14 +97,14 @@ def by_principle(results, tool):
     for row in by_criterion(results, tool):
         totals[row['principle']] = totals.get(row['principle'], 0) + row['occurrences']
     order = [principle(str(n)) for n in range(1, 5)]
-    return [{'principle': p, 'occurrences': totals[p]} for p in order if p in totals]
+    return [{'principle': p, 'occurrences': totals.get(p, 0)} for p in order]
 
 
 def by_level(results, tool):
     totals = {}
     for row in by_criterion(results, tool):
         totals[row['level']] = totals.get(row['level'], 0) + row['occurrences']
-    return [{'level': lvl, 'occurrences': totals[lvl]} for lvl in ['A', 'AA'] if lvl in totals]
+    return [{'level': lvl, 'occurrences': totals.get(lvl, 0)} for lvl in ['A', 'AA']]
 
 
 def viewport_criteria(results):
@@ -162,6 +162,12 @@ def ibm_buckets(results):
             row[device] = index[(device, 'ibm-equal-access')].raw['summary']['counts'][category]
         rows.append(row)
     return rows
+
+
+def rule_set(result):
+    if result.metadata.tool != 'ibm-equal-access':
+        return None
+    return result.raw['summary']['ruleArchive']
 
 
 def ibm_rules(results):

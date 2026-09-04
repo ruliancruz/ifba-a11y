@@ -12,6 +12,7 @@ __pycache__/
 .coverage
 .ipynb_checkpoints/
 *.nbconvert.ipynb
+analysis/notebook.html
 
 # Local
 docs/

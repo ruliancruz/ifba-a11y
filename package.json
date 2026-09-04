@@ -1,8 +1,8 @@
 {
-  "name": "tcc",
+  "name": "ifba-a11y",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Automated WCAG 2.2 AA accessibility evaluation of the institutional portal of the Instituto Federal de Educação, Ciência e Tecnologia da Bahia, with axe-core and the IBM Equal Access Checker",
+  "private": true,
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
@@ -11,9 +11,17 @@
     "lint:fix": "eslint . --fix",
     "collect": "playwright test"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "accessibility",
+    "a11y",
+    "wcag",
+    "axe-core",
+    "equal-access",
+    "playwright",
+    "reproducible-research"
+  ],
+  "author": "Rulian de Jesus Cruz",
+  "license": "MIT",
   "engines": {
     "node": "24.17.x"
   },

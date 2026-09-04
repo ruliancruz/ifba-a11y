@@ -29,8 +29,10 @@ def test_reports_the_conformance_level_of_each_wcag_criterion():
 def test_maps_ibm_rule_ids_to_their_wcag_criteria():
     rules = [
         'img_alt_valid',
+        'img_alt_redundant',
         'a_text_purpose',
         'aria_content_in_landmark',
+        'text_contrast_sufficient',
         'frame_title_exists',
         'html_lang_exists',
         'table_headers_exists',
@@ -40,8 +42,10 @@ def test_maps_ibm_rule_ids_to_their_wcag_criteria():
 
     assert criteria == {
         'img_alt_valid': ['1.1.1'],
+        'img_alt_redundant': ['1.1.1', '2.4.4'],
         'a_text_purpose': ['2.4.4', '4.1.2'],
         'aria_content_in_landmark': ['1.3.1'],
+        'text_contrast_sufficient': ['1.4.3'],
         'frame_title_exists': ['4.1.2'],
         'html_lang_exists': ['3.1.1'],
         'table_headers_exists': ['1.3.1'],

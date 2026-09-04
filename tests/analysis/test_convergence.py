@@ -77,7 +77,7 @@ def test_rule_pairs_matches_counterpart_rules_and_flags_engine_exclusive_ones():
         {'axe_rule': 'image-alt', 'ibm_rule': 'img_alt_valid',
          'criteria': ['1.1.1'], 'level': 'A', 'detection': 'both'},
         {'axe_rule': None, 'ibm_rule': 'img_alt_redundant',
-         'criteria': ['1.1.1'], 'level': 'A', 'detection': 'ibm_only'},
+         'criteria': ['1.1.1', '2.4.4'], 'level': 'A', 'detection': 'ibm_only'},
         {'axe_rule': None, 'ibm_rule': 'aria_content_in_landmark',
          'criteria': ['1.3.1'], 'level': 'A', 'detection': 'ibm_only'},
         {'axe_rule': 'link-name', 'ibm_rule': 'a_text_purpose',

@@ -3,12 +3,12 @@ import type { Browser, Page } from '@playwright/test'
 import * as fs from 'node:fs'
 import { TARGETS, WCAG_TAGS } from '../collection/config'
 import type { Target } from '../collection/config'
-import { buildMetadata } from '../collection/metadata'
+import { buildFidelity, buildMetadata } from '../collection/metadata'
 import { normalizeAxe } from '../collection/normalize/axe'
 import { normalizeIbm } from '../collection/normalize/ibm'
 import { runAxe } from '../collection/engines/axe'
 import { runIbm } from '../collection/engines/ibm'
-import type { MissingAsset } from '../collection/schema'
+import type { ExecutionContext, MissingAsset } from '../collection/schema'
 import { gotoTarget } from '../collection/navigate'
 import { writeFidelity, writeResult } from '../collection/collect'
 
@@ -43,10 +43,16 @@ function trackMissingAssets(page: Page): MissingAsset[] {
   return missing
 }
 
-async function captureFidelity(page: Page, target: Target, missing: MissingAsset[], directory: string) {
+async function captureFidelity(
+  page: Page,
+  target: Target,
+  missing: MissingAsset[],
+  directory: string,
+  context: ExecutionContext,
+) {
   if (target.mode !== 'archive') return
   const stylesheets = await page.evaluate(() => document.styleSheets.length)
-  writeFidelity(directory, { stylesheets, missingAssets: missing })
+  writeFidelity(directory, buildFidelity(context, stylesheets, missing))
 }
 
 for (const target of TARGETS) {
@@ -54,7 +60,8 @@ for (const target of TARGETS) {
     const directory = `${target.outDir}/${testInfo.project.name}`
     const missing = trackMissingAssets(page)
     await gotoTarget(page, target)
-    await captureFidelity(page, target, missing, directory)
+    const context = executionContext(page, browser, testInfo.project.name)
+    await captureFidelity(page, target, missing, directory, context)
 
     const axeRaw = await runAxe(page)
     writeResult(directory, 'axe.json', {

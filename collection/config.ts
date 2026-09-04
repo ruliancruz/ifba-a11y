@@ -69,6 +69,8 @@ export const WCAG_TAGS = [
   'wcag22aa',
 ] as const
 
+export const IBM_RULE_ARCHIVE = '13July2026'
+
 export const VIEWPORTS = {
   desktop: { width: 1280, height: 720 },
   mobile: { width: 375, height: 667 },

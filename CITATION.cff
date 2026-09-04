@@ -1,0 +1,44 @@
+cff-version: 1.2.0
+title: >-
+  ifba-a11y: accessibility evaluation suite for the institutional portal of the
+  Instituto Federal de Educação, Ciência e Tecnologia da Bahia
+message: >-
+  If you use this software or the dataset it produced, please cite both. The
+  dataset carries its own DOI, listed under identifiers below.
+type: software
+abstract: >-
+  A reproducible, containerised suite that evaluates the accessibility of the
+  institutional portal of the Instituto Federal de Educação, Ciência e Tecnologia
+  da Bahia against WCAG 2.2 level AA, using two mutually independent engines,
+  axe-core and the IBM Equal Access Checker, on a desktop and a mobile viewport.
+  The result data it produces is published separately as a citable dataset.
+authors:
+  - family-names: Cruz
+    given-names: Rulian de Jesus
+    orcid: https://orcid.org/0009-0009-1050-5153
+    affiliation: >-
+      Instituto Federal de Educação, Ciência e Tecnologia da Bahia
+version: 1.0.0
+date-released: '2026-09-04'
+license: MIT
+repository-code: https://github.com/ruliancruz/ifba-a11y
+keywords:
+  - web accessibility
+  - WCAG 2.2
+  - automated accessibility testing
+  - axe-core
+  - IBM Equal Access Checker
+  - Playwright
+  - reproducible research
+  - higher education
+  - Instituto Federal de Educação, Ciência e Tecnologia da Bahia
+  - IFBA
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.22268515
+    description: >-
+      The accessibility evaluation dataset produced by this software, version 1.0.0
+  - type: doi
+    value: 10.5281/zenodo.22268514
+    description: >-
+      The accessibility evaluation dataset, all versions

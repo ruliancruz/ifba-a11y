@@ -20,7 +20,7 @@ _LEVELS = {
 
 _IBM_CRITERIA = {
     'img_alt_valid': ['1.1.1'],
-    'img_alt_redundant': ['1.1.1'],
+    'img_alt_redundant': ['1.1.1', '2.4.4'],
     'a_text_purpose': ['2.4.4', '4.1.2'],
     'aria_content_in_landmark': ['1.3.1'],
     'text_contrast_sufficient': ['1.4.3'],

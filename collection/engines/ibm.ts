@@ -1,8 +1,9 @@
 import type { Page } from '@playwright/test'
 import * as aChecker from 'accessibility-checker'
+import { IBM_RULE_ARCHIVE } from '../config'
 
 export async function runIbm(page: Page, label: string) {
-  await aChecker.setConfig({ outputFormat: [] })
+  await aChecker.setConfig({ outputFormat: [], ruleArchive: IBM_RULE_ARCHIVE })
   const { report } = await aChecker.getCompliance(page, label)
 
   if (!('results' in report)) {

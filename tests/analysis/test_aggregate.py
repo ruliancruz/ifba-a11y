@@ -9,6 +9,7 @@ from a11y.aggregate import (
     impact_table,
     overview,
     priorities,
+    rule_set,
     viewport_criteria,
 )
 from a11y.schema import Metadata, Result, Violation
@@ -121,7 +122,19 @@ def test_ibm_buckets_reads_each_summary_count_category_per_viewport():
     ]
 
 
-def test_by_impact_totals_axe_occurrences_per_impact_across_viewports():
+def test_rule_set_names_the_ibm_deployment_and_nothing_for_the_self_contained_engine():
+    archive = '13 July 2026 Deployment (IBM 7.3) (13July2026)'
+    results = [
+        _result('desktop', 'axe-core', []),
+        _result('desktop', 'ibm-equal-access', [], raw={'summary': {'ruleArchive': archive}}),
+    ]
+
+    labels = [rule_set(r) for r in results]
+
+    assert labels == [None, archive]
+
+
+def test_by_impact_totals_axe_occurrences_across_every_impact_level():
     results = [
         _result('desktop', 'axe-core', [
             _violation('image-alt', 20, impact='critical'),
@@ -138,6 +151,8 @@ def test_by_impact_totals_axe_occurrences_per_impact_across_viewports():
     assert rows == [
         {'impact': 'critical', 'occurrences': 40},
         {'impact': 'serious', 'occurrences': 29},
+        {'impact': 'moderate', 'occurrences': 0},
+        {'impact': 'minor', 'occurrences': 0},
     ]
 
 
@@ -169,7 +184,7 @@ def test_by_criterion_uses_the_ibm_lookup_for_occurrences_per_criterion():
     ]
 
 
-def test_by_principle_rolls_occurrences_up_to_pour_principles_in_canonical_order():
+def test_by_principle_rolls_occurrences_up_to_all_four_pour_principles_in_canonical_order():
     results = [
         _result('desktop', 'axe-core', [
             _violation('image-alt', 10, wcag=['1.1.1']),
@@ -186,26 +201,21 @@ def test_by_principle_rolls_occurrences_up_to_pour_principles_in_canonical_order
     assert rows == [
         {'principle': 'Perceivable', 'occurrences': 20},
         {'principle': 'Operable', 'occurrences': 19},
+        {'principle': 'Understandable', 'occurrences': 0},
         {'principle': 'Robust', 'occurrences': 19},
     ]
 
 
-def test_by_level_rolls_occurrences_up_to_conformance_levels_a_before_aa():
+def test_by_level_rolls_occurrences_up_to_both_conformance_levels_a_before_aa():
     results = [
-        _result('desktop', 'axe-core', [
-            _violation('target-size', 25, wcag=['2.5.8']),
-            _violation('link-name', 7, wcag=['2.4.4', '4.1.2']),
-        ]),
-        _result('mobile', 'axe-core', [
-            _violation('target-size', 4, wcag=['2.5.8']),
-            _violation('link-name', 12, wcag=['2.4.4', '4.1.2']),
-        ]),
+        _result('desktop', 'axe-core', [_violation('target-size', 25, wcag=['2.5.8'])]),
+        _result('mobile', 'axe-core', [_violation('target-size', 4, wcag=['2.5.8'])]),
     ]
 
     rows = by_level(results, 'axe-core')
 
     assert rows == [
-        {'level': 'A', 'occurrences': 38},
+        {'level': 'A', 'occurrences': 0},
         {'level': 'AA', 'occurrences': 29},
     ]
 

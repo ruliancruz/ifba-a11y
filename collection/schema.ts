@@ -11,13 +11,16 @@ export interface Violation {
   helpUrl?: string
 }
 
-export interface Metadata {
+export interface ExecutionContext {
   timestamp: string
   url: string
   browser: string
   browserVersion: string
   viewport: { width: number; height: number } | null
   device: string
+}
+
+export interface Metadata extends ExecutionContext {
   tool: Tool
   toolVersion: string
   wcagTags?: readonly string[]
@@ -36,6 +39,7 @@ export interface MissingAsset {
 }
 
 export interface Fidelity {
+  metadata: ExecutionContext
   stylesheets: number
   missingAssets: MissingAsset[]
 }
