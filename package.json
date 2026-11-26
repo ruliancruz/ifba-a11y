@@ -1,6 +1,6 @@
 {
   "name": "ifba-a11y",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Automated WCAG 2.2 AA accessibility evaluation of the institutional portal of the Instituto Federal de Educação, Ciência e Tecnologia da Bahia, with axe-core and the IBM Equal Access Checker",
   "private": true,
   "scripts": {
