@@ -3,10 +3,6 @@ import type { Target } from './config'
 const MODES: readonly Target['mode'][] = ['live', 'archive']
 const FIELDS = ['label', 'url', 'mode', 'outDir'] as const
 
-// Validates a targets manifest (the parsed JSON of a TARGETS_FILE) and returns it
-// in the Target shape. A study evaluates other pages by supplying its own
-// manifest instead of editing TARGETS, so the instrument's code stays the same
-// across studies and the manifest is the only thing that varies.
 export function parseTargets(input: unknown): Target[] {
   if (!Array.isArray(input) || input.length === 0) {
     throw new Error('Targets manifest must be a non-empty array')

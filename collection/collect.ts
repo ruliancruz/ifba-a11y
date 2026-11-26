@@ -14,8 +14,6 @@ export function writeFidelity(directory: string, fidelity: Fidelity): void {
   fs.writeFileSync(path.join(directory, 'fidelity.json'), JSON.stringify(fidelity, null, 2))
 }
 
-// The targets a run evaluates: the manifest named by TARGETS_FILE when it is set,
-// otherwise the default TARGETS, which reproduce the published dataset.
 export function loadTargets(file: string | undefined, defaults: Target[]): Target[] {
   if (file === undefined || file === '') return defaults
   return parseTargets(JSON.parse(fs.readFileSync(file, 'utf-8')))
