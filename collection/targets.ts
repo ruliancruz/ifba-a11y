@@ -7,6 +7,7 @@ export function parseTargets(input: unknown): Target[] {
   if (!Array.isArray(input) || input.length === 0) {
     throw new Error('Targets manifest must be a non-empty array')
   }
+
   const targets = input.map(parseTarget)
   rejectDuplicates(targets, 'label')
   rejectDuplicates(targets, 'outDir')
@@ -17,6 +18,7 @@ function parseTarget(entry: unknown, index: number): Target {
   if (typeof entry !== 'object' || entry === null || Array.isArray(entry)) {
     throw new Error(`Target ${index} must be an object`)
   }
+
   const record = entry as Record<string, unknown>
   for (const field of FIELDS) {
     const value = record[field]
@@ -24,21 +26,26 @@ function parseTarget(entry: unknown, index: number): Target {
       throw new Error(`Target ${index}: "${field}" must be a non-empty string`)
     }
   }
+
   const { label, url, mode, outDir } = record as Record<(typeof FIELDS)[number], string>
   if (!MODES.includes(mode as Target['mode'])) {
     throw new Error(`Target ${index}: "mode" must be "live" or "archive"`)
   }
+
   if (!isHttpUrl(url)) {
     throw new Error(`Target ${index}: "url" must be an http(s) URL`)
   }
+
   if (!isUnderResults(outDir)) {
     throw new Error(`Target ${index}: "outDir" must be a path under results/`)
   }
+
   return { label, url, mode: mode as Target['mode'], outDir }
 }
 
 function isHttpUrl(value: string): boolean {
   if (!URL.canParse(value)) return false
+
   const { protocol } = new URL(value)
   return protocol === 'http:' || protocol === 'https:'
 }
