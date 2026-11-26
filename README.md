@@ -545,6 +545,17 @@ in `analysis/a11y/wcag.py` covers the rules this portal exhibits, and an unliste
 rule raises rather than emitting a blank, which is the intended behaviour: it tells
 you to curate the entry instead of quietly reporting nothing.
 
+## Studies using this instrument
+
+Each study keeps its manifest, results and study-specific scripts in its own
+dataset, and names the instrument tag that produced them. The DOIs below are
+concept DOIs, which resolve to the latest version of each dataset.
+
+| Study | Pages | Instrument | Dataset |
+| --- | --- | --- | --- |
+| Accessibility of the IFBA institutional portal (undergraduate thesis, 2026) | archived homepage and seven live portal pages | `v1.0.0` | [10.5281/zenodo.22268514](https://doi.org/10.5281/zenodo.22268514) |
+| Public entry points to distance education at IFBA (Conecta EaD Bahia, 2026) | EaD and UAB pages, a selection call, AVA and SUAP login pages | `v1.0.0` | [10.5281/zenodo.24546978](https://doi.org/10.5281/zenodo.24546978) |
+
 ## How to cite
 
 Cite the **dataset** when you use the measurements, and the **software** when you
