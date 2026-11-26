@@ -9,6 +9,7 @@ export function parseTargets(input: unknown): Target[] {
   }
 
   const targets = input.map(parseTarget)
+
   rejectDuplicates(targets, 'label')
   rejectDuplicates(targets, 'outDir')
   return targets
@@ -20,14 +21,17 @@ function parseTarget(entry: unknown, index: number): Target {
   }
 
   const record = entry as Record<string, unknown>
+
   for (const field of FIELDS) {
     const value = record[field]
+
     if (typeof value !== 'string' || value === '') {
       throw new Error(`Target ${index}: "${field}" must be a non-empty string`)
     }
   }
 
   const { label, url, mode, outDir } = record as Record<(typeof FIELDS)[number], string>
+
   if (!MODES.includes(mode as Target['mode'])) {
     throw new Error(`Target ${index}: "mode" must be "live" or "archive"`)
   }
@@ -47,6 +51,7 @@ function isHttpUrl(value: string): boolean {
   if (!URL.canParse(value)) return false
 
   const { protocol } = new URL(value)
+
   return protocol === 'http:' || protocol === 'https:'
 }
 
@@ -54,11 +59,13 @@ function isHttpUrl(value: string): boolean {
 // mounts only results/, so anything outside it would be lost with the container.
 function isUnderResults(value: string): boolean {
   const segments = value.split('/')
+
   return segments[0] === 'results' && segments.length > 1 && !segments.includes('..')
 }
 
 function rejectDuplicates(targets: Target[], field: 'label' | 'outDir'): void {
   const seen = new Set<string>()
+
   for (const target of targets) {
     if (seen.has(target[field])) throw new Error(`Duplicate target ${field}: ${target[field]}`)
     seen.add(target[field])
