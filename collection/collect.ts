@@ -16,5 +16,6 @@ export function writeFidelity(directory: string, fidelity: Fidelity): void {
 
 export function loadTargets(file: string | undefined, defaults: Target[]): Target[] {
   if (file === undefined || file === '') return defaults
+
   return parseTargets(JSON.parse(fs.readFileSync(file, 'utf-8')))
 }
