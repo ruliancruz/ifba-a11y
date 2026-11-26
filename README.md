@@ -235,9 +235,10 @@ without the directory it was found in.
 
 ## Targets evaluated
 
-The collection runs a **manifest** of targets, declared once in
-`collection/config.ts` and shared by the collection code and
-`playwright.config.ts`.
+The collection runs a **manifest** of targets. The default one, below, is
+`TARGETS` in `collection/config.ts`, and it is what produced the published
+dataset. A study of other pages supplies its own manifest through `TARGETS_FILE`
+(see [Applying this to another portal](#applying-this-to-another-portal)).
 
 | Directory                              | Page                                    | Role                                         |
 | -------------------------------------- | --------------------------------------- | -------------------------------------------- |
@@ -348,12 +349,13 @@ collection/
   config.ts            TARGETS manifest, WCAG tags, viewports, single source of truth
   schema.ts            the result-file contract shared by both engines
   metadata.ts          assembles the metadata object                      (pure)
+  targets.ts           validates a TARGETS_FILE manifest                  (pure)
   normalize/axe.ts     axe output -> the common violation shape           (pure)
   normalize/ibm.ts     IBM output -> the common violation shape           (pure)
   navigate.ts          archive and live navigation, retries and pacing    (browser)
   engines/axe.ts       runs axe-core against the loaded page              (browser)
   engines/ibm.ts       runs IBM Equal Access against the loaded page      (browser)
-  collect.ts           serializes and writes result files                 (fs)
+  collect.ts           loads TARGETS_FILE, writes result files            (fs)
 analysis/
   a11y/schema.py       dataclasses mirroring schema.ts                    (pure)
   a11y/parse.py        parse and validate a result file                   (pure)
@@ -501,19 +503,40 @@ measurement into a load test.
 
 ## Applying this to another portal
 
-The manifest is the only thing that binds this suite to the IFBA portal. Editing
-`TARGETS` in `collection/config.ts` retargets it, and everything downstream, both
-engines, both viewports, the result schema and the whole analysis package, works
-unchanged.
+The manifest is the only thing that binds this suite to the IFBA portal. A study
+of other pages supplies its own manifest as a JSON file and points `TARGETS_FILE`
+at it, so the code it runs is exactly a released version of this repository and
+the manifest is the only thing that differs. Everything downstream, both engines,
+both viewports, the result schema and the whole analysis package, works
+unchanged. Without `TARGETS_FILE`, the run uses `TARGETS` in
+`collection/config.ts`, which reproduces the published dataset.
 
-```ts
-{
-  label: 'homepage',
-  url: 'https://example.edu.br/',
-  mode: 'live',          // or 'archive', for a Wayback capture URL
-  outDir: 'results/homepage',
-}
+```json
+[
+  {
+    "label": "homepage",
+    "url": "https://example.edu.br/",
+    "mode": "live",
+    "outDir": "results/homepage"
+  }
+]
 ```
+
+`mode` is `live`, or `archive` for a Wayback capture URL. `outDir` must sit under
+`results/`, the directory the run mounts, and labels and output directories must
+be unique. The manifest is validated before the browser starts, and a malformed
+entry stops the run with the entry's index and the offending field.
+
+```bash
+docker run --ipc=host \
+  -e TARGETS_FILE=/app/targets.json \
+  -v "$(pwd)/targets.json":/app/targets.json:ro \
+  -v "$(pwd)/results":/app/results \
+  ifba-a11y-collect
+```
+
+Keep the manifest, and the results it produces, with the study that uses them,
+not in this repository, and cite the release tag of the instrument the run used.
 
 Two parts are portal-specific and would need review. `analysis/a11y/components.py`
 classifies selectors into the components of _this_ portal's templates, so its

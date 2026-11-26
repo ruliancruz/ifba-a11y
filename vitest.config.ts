@@ -5,7 +5,7 @@ export default defineConfig({
     include: ['tests/unit/**/*.test.ts'],
     coverage: {
       provider: 'v8',
-      include: ['collection/metadata.ts', 'collection/normalize/**'],
+      include: ['collection/metadata.ts', 'collection/targets.ts', 'collection/normalize/**'],
       thresholds: {
         lines: 100,
         functions: 100,
