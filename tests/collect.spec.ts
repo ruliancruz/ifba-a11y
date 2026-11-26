@@ -10,7 +10,7 @@ import { runAxe } from '../collection/engines/axe'
 import { runIbm } from '../collection/engines/ibm'
 import type { ExecutionContext, MissingAsset } from '../collection/schema'
 import { gotoTarget } from '../collection/navigate'
-import { writeFidelity, writeResult } from '../collection/collect'
+import { loadTargets, writeFidelity, writeResult } from '../collection/collect'
 
 const IBM_VERSION = (
   JSON.parse(
@@ -55,7 +55,7 @@ async function captureFidelity(
   writeFidelity(directory, buildFidelity(context, stylesheets, missing))
 }
 
-for (const target of TARGETS) {
+for (const target of loadTargets(process.env.TARGETS_FILE, TARGETS)) {
   test(`Portal IFBA accessibility — ${target.label}`, async ({ page, browser }, testInfo) => {
     const directory = `${target.outDir}/${testInfo.project.name}`
     const missing = trackMissingAssets(page)
